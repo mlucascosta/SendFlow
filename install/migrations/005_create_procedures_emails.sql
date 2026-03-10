@@ -1,8 +1,10 @@
+-- Compatibilidade: MariaDB/MySQL | Compatibility: MariaDB/MySQL
 -- Migration 005: Procedures de email | Email procedures
 
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sp_email_enviar $$
+-- Procedure `sp_email_enviar` (MariaDB/MySQL) | Procedure `sp_email_enviar` (MariaDB/MySQL)
 CREATE PROCEDURE sp_email_enviar(
     IN p_user_id INT,
     IN p_session_id VARCHAR(128),
@@ -28,6 +30,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_email_atualizar_status_apos_envio $$
+-- Procedure `sp_email_atualizar_status_apos_envio` (MariaDB/MySQL) | Procedure `sp_email_atualizar_status_apos_envio` (MariaDB/MySQL)
 CREATE PROCEDURE sp_email_atualizar_status_apos_envio(
     IN p_email_id INT,
     IN p_resend_message_id VARCHAR(255),
@@ -49,6 +52,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_email_listar_por_status $$
+-- Procedure `sp_email_listar_por_status` (MariaDB/MySQL) | Procedure `sp_email_listar_por_status` (MariaDB/MySQL)
 CREATE PROCEDURE sp_email_listar_por_status(
     IN p_user_id INT,
     IN p_status VARCHAR(20),
@@ -67,6 +71,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_email_buscar_por_id $$
+-- Procedure `sp_email_buscar_por_id` (MariaDB/MySQL) | Procedure `sp_email_buscar_por_id` (MariaDB/MySQL)
 CREATE PROCEDURE sp_email_buscar_por_id(
     IN p_email_id INT,
     IN p_user_id INT
@@ -79,6 +84,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_email_registrar_abertura $$
+-- Procedure `sp_email_registrar_abertura` (MariaDB/MySQL) | Procedure `sp_email_registrar_abertura` (MariaDB/MySQL)
 CREATE PROCEDURE sp_email_registrar_abertura(
     IN p_resend_message_id VARCHAR(255)
 )

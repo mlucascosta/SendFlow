@@ -1,8 +1,10 @@
+-- Compatibilidade: MariaDB/MySQL | Compatibility: MariaDB/MySQL
 -- Migration 006: Procedures de segurança | Security procedures
 
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sp_seguranca_verificar_rate_limit $$
+-- Procedure `sp_seguranca_verificar_rate_limit` (MariaDB/MySQL) | Procedure `sp_seguranca_verificar_rate_limit` (MariaDB/MySQL)
 CREATE PROCEDURE sp_seguranca_verificar_rate_limit(
     IN p_email VARCHAR(255),
     IN p_ip VARCHAR(45),
@@ -31,6 +33,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_seguranca_limpar_failed_logins $$
+-- Procedure `sp_seguranca_limpar_failed_logins` (MariaDB/MySQL) | Procedure `sp_seguranca_limpar_failed_logins` (MariaDB/MySQL)
 CREATE PROCEDURE sp_seguranca_limpar_failed_logins(
     IN p_email VARCHAR(255),
     IN p_ip VARCHAR(45)
@@ -41,6 +44,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_seguranca_auditar_acao $$
+-- Procedure `sp_seguranca_auditar_acao` (MariaDB/MySQL) | Procedure `sp_seguranca_auditar_acao` (MariaDB/MySQL)
 CREATE PROCEDURE sp_seguranca_auditar_acao(
     IN p_user_id INT,
     IN p_session_id VARCHAR(128),
@@ -58,6 +62,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_seguranca_garbage_collector $$
+-- Procedure `sp_seguranca_garbage_collector` (MariaDB/MySQL) | Procedure `sp_seguranca_garbage_collector` (MariaDB/MySQL)
 CREATE PROCEDURE sp_seguranca_garbage_collector()
 BEGIN
     UPDATE sessions

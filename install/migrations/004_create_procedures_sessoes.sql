@@ -1,8 +1,10 @@
+-- Compatibilidade: MariaDB/MySQL | Compatibility: MariaDB/MySQL
 -- Migration 004: Procedures de sessão | Session procedures
 
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sp_sessao_criar $$
+-- Procedure `sp_sessao_criar` (MariaDB/MySQL) | Procedure `sp_sessao_criar` (MariaDB/MySQL)
 CREATE PROCEDURE sp_sessao_criar(
     IN p_session_id VARCHAR(128),
     IN p_user_id INT,
@@ -23,6 +25,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_sessao_validar $$
+-- Procedure `sp_sessao_validar` (MariaDB/MySQL) | Procedure `sp_sessao_validar` (MariaDB/MySQL)
 CREATE PROCEDURE sp_sessao_validar(
     IN p_session_id VARCHAR(128),
     IN p_ip VARCHAR(45),
@@ -71,6 +74,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_sessao_listar_ativas $$
+-- Procedure `sp_sessao_listar_ativas` (MariaDB/MySQL) | Procedure `sp_sessao_listar_ativas` (MariaDB/MySQL)
 CREATE PROCEDURE sp_sessao_listar_ativas(
     IN p_user_id INT,
     IN p_session_id_atual VARCHAR(128)
@@ -89,6 +93,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_sessao_encerrar $$
+-- Procedure `sp_sessao_encerrar` (MariaDB/MySQL) | Procedure `sp_sessao_encerrar` (MariaDB/MySQL)
 CREATE PROCEDURE sp_sessao_encerrar(
     IN p_session_id VARCHAR(128),
     IN p_user_id INT,
@@ -110,6 +115,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_sessao_encerrar_todas_exceto_atual $$
+-- Procedure `sp_sessao_encerrar_todas_exceto_atual` (MariaDB/MySQL) | Procedure `sp_sessao_encerrar_todas_exceto_atual` (MariaDB/MySQL)
 CREATE PROCEDURE sp_sessao_encerrar_todas_exceto_atual(
     IN p_user_id INT,
     IN p_session_id_atual VARCHAR(128),

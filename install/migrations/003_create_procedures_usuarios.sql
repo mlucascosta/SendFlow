@@ -1,8 +1,10 @@
+-- Compatibilidade: MariaDB/MySQL | Compatibility: MariaDB/MySQL
 -- Migration 003: Procedures de usuários | User procedures
 
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sp_usuario_criar_primeiro_admin $$
+-- Procedure `sp_usuario_criar_primeiro_admin` (MariaDB/MySQL) | Procedure `sp_usuario_criar_primeiro_admin` (MariaDB/MySQL)
 CREATE PROCEDURE sp_usuario_criar_primeiro_admin(
     IN p_name VARCHAR(100),
     IN p_email VARCHAR(255),
@@ -27,6 +29,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_usuario_autenticar $$
+-- Procedure `sp_usuario_autenticar` (MariaDB/MySQL) | Procedure `sp_usuario_autenticar` (MariaDB/MySQL)
 CREATE PROCEDURE sp_usuario_autenticar(
     IN p_email VARCHAR(255),
     IN p_ip VARCHAR(45),
@@ -60,6 +63,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_usuario_atualizar_senha $$
+-- Procedure `sp_usuario_atualizar_senha` (MariaDB/MySQL) | Procedure `sp_usuario_atualizar_senha` (MariaDB/MySQL)
 CREATE PROCEDURE sp_usuario_atualizar_senha(
     IN p_user_id INT,
     IN p_nova_senha_hash VARCHAR(255),
@@ -85,6 +89,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_usuario_salvar_resend_key $$
+-- Procedure `sp_usuario_salvar_resend_key` (MariaDB/MySQL) | Procedure `sp_usuario_salvar_resend_key` (MariaDB/MySQL)
 CREATE PROCEDURE sp_usuario_salvar_resend_key(
     IN p_user_id INT,
     IN p_api_key VARBINARY(255),

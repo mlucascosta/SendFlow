@@ -1,5 +1,7 @@
+-- Compatibilidade: MariaDB/MySQL | Compatibility: MariaDB/MySQL
 -- Migration 002: Criar views de consulta | Create reporting views
 
+-- View `vw_usuarios_ativos_com_sessoes` (MySQL/MariaDB) | View `vw_usuarios_ativos_com_sessoes` (MySQL/MariaDB)
 CREATE OR REPLACE VIEW vw_usuarios_ativos_com_sessoes AS
 SELECT
     u.id,
@@ -12,6 +14,7 @@ LEFT JOIN sessions s ON s.user_id = u.id AND s.is_active = 1
 WHERE u.is_active = 1 AND u.deleted_at IS NULL
 GROUP BY u.id, u.name, u.email, u.role;
 
+-- View `vw_estatisticas_envios_hoje` (MySQL/MariaDB) | View `vw_estatisticas_envios_hoje` (MySQL/MariaDB)
 CREATE OR REPLACE VIEW vw_estatisticas_envios_hoje AS
 SELECT
     DATE(created_at) AS ref_date,
@@ -24,6 +27,7 @@ FROM emails
 WHERE DATE(created_at) = CURDATE()
 GROUP BY DATE(created_at);
 
+-- View `vw_sessoes_ativas_detalhadas` (MySQL/MariaDB) | View `vw_sessoes_ativas_detalhadas` (MySQL/MariaDB)
 CREATE OR REPLACE VIEW vw_sessoes_ativas_detalhadas AS
 SELECT
     s.id AS session_id,
@@ -39,6 +43,7 @@ FROM sessions s
 INNER JOIN users u ON u.id = s.user_id
 WHERE s.is_active = 1;
 
+-- View `vw_email_summary_by_status` (MySQL/MariaDB) | View `vw_email_summary_by_status` (MySQL/MariaDB)
 CREATE OR REPLACE VIEW vw_email_summary_by_status AS
 SELECT
     user_id,
@@ -48,6 +53,7 @@ SELECT
 FROM emails
 GROUP BY user_id, status, direction;
 
+-- View `vw_security_alerts` (MySQL/MariaDB) | View `vw_security_alerts` (MySQL/MariaDB)
 CREATE OR REPLACE VIEW vw_security_alerts AS
 SELECT
     f.email,

@@ -1,8 +1,10 @@
+-- Compatibilidade: MariaDB/MySQL | Compatibility: MariaDB/MySQL
 -- Migration 007: Procedures de integração Resend | Resend integration procedures
 
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sp_resend_webhook_receber $$
+-- Procedure `sp_resend_webhook_receber` (MariaDB/MySQL) | Procedure `sp_resend_webhook_receber` (MariaDB/MySQL)
 CREATE PROCEDURE sp_resend_webhook_receber(
     IN p_event_type VARCHAR(50),
     IN p_resend_id VARCHAR(255),
@@ -33,6 +35,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_resend_webhooks_pendentes $$
+-- Procedure `sp_resend_webhooks_pendentes` (MariaDB/MySQL) | Procedure `sp_resend_webhooks_pendentes` (MariaDB/MySQL)
 CREATE PROCEDURE sp_resend_webhooks_pendentes()
 BEGIN
     SELECT *
@@ -43,6 +46,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_resend_testar_conexao $$
+-- Procedure `sp_resend_testar_conexao` (MariaDB/MySQL) | Procedure `sp_resend_testar_conexao` (MariaDB/MySQL)
 CREATE PROCEDURE sp_resend_testar_conexao(
     IN p_user_id INT,
     OUT p_domain_verificado TINYINT,

@@ -1,8 +1,10 @@
+-- Compatibilidade: MariaDB/MySQL | Compatibility: MariaDB/MySQL
 -- Migration 010: Procedure de instalação e seed settings | Installation procedure and base settings
 
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sp_instalacao_verificar $$
+-- Procedure `sp_instalacao_verificar` (MariaDB/MySQL) | Procedure `sp_instalacao_verificar` (MariaDB/MySQL)
 CREATE PROCEDURE sp_instalacao_verificar(
     OUT p_ja_instalado TINYINT,
     OUT p_total_usuarios INT,

@@ -1,8 +1,10 @@
+-- Compatibilidade: MariaDB/MySQL | Compatibility: MariaDB/MySQL
 -- Migration 008: Procedures de auditoria | Audit procedures
 
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS sp_auditoria_por_usuario $$
+-- Procedure `sp_auditoria_por_usuario` (MariaDB/MySQL) | Procedure `sp_auditoria_por_usuario` (MariaDB/MySQL)
 CREATE PROCEDURE sp_auditoria_por_usuario(
     IN p_user_id INT,
     IN p_dias INT,
@@ -18,12 +20,14 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_auditoria_sessoes_ativas $$
+-- Procedure `sp_auditoria_sessoes_ativas` (MariaDB/MySQL) | Procedure `sp_auditoria_sessoes_ativas` (MariaDB/MySQL)
 CREATE PROCEDURE sp_auditoria_sessoes_ativas()
 BEGIN
     SELECT * FROM vw_sessoes_ativas_detalhadas;
 END $$
 
 DROP PROCEDURE IF EXISTS sp_auditoria_estatisticas_envios $$
+-- Procedure `sp_auditoria_estatisticas_envios` (MariaDB/MySQL) | Procedure `sp_auditoria_estatisticas_envios` (MariaDB/MySQL)
 CREATE PROCEDURE sp_auditoria_estatisticas_envios(
     IN p_user_id INT,
     IN p_periodo_dias INT
@@ -44,6 +48,7 @@ BEGIN
 END $$
 
 DROP PROCEDURE IF EXISTS sp_auditoria_tentativas_falhas $$
+-- Procedure `sp_auditoria_tentativas_falhas` (MariaDB/MySQL) | Procedure `sp_auditoria_tentativas_falhas` (MariaDB/MySQL)
 CREATE PROCEDURE sp_auditoria_tentativas_falhas(
     IN p_ip VARCHAR(45),
     IN p_dias INT

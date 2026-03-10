@@ -1,5 +1,11 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Wizard web de instalação do SendFlow.
+ * SendFlow web installation wizard.
+ */
 session_start();
 $step = (int) ($_GET['step'] ?? 1);
 $step = max(1, min(6, $step));

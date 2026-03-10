@@ -1,9 +1,11 @@
+-- Compatibilidade: MariaDB/MySQL | Compatibility: MariaDB/MySQL
 -- Migration 001: Criar tabelas principais | Create core tables
 -- Compatível com MySQL 5.7+ e MariaDB 10.3+
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
+-- Tabela `users` | Table `users`
 CREATE TABLE IF NOT EXISTS users (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -27,6 +29,7 @@ CREATE TABLE IF NOT EXISTS users (
     KEY idx_users_deleted (deleted_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Tabela `sessions` | Table `sessions`
 CREATE TABLE IF NOT EXISTS sessions (
     id VARCHAR(128) PRIMARY KEY,
     user_id INT UNSIGNED NOT NULL,
@@ -42,6 +45,7 @@ CREATE TABLE IF NOT EXISTS sessions (
     CONSTRAINT fk_sessions_user FOREIGN KEY (user_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Tabela `emails` | Table `emails`
 CREATE TABLE IF NOT EXISTS emails (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNSIGNED NOT NULL,
@@ -66,6 +70,7 @@ CREATE TABLE IF NOT EXISTS emails (
     CONSTRAINT fk_emails_session FOREIGN KEY (session_id) REFERENCES sessions(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Tabela `email_attachments` | Table `email_attachments`
 CREATE TABLE IF NOT EXISTS email_attachments (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     email_id INT UNSIGNED NOT NULL,
@@ -77,6 +82,7 @@ CREATE TABLE IF NOT EXISTS email_attachments (
     CONSTRAINT fk_attachments_email FOREIGN KEY (email_id) REFERENCES emails(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Tabela `audit_logs` | Table `audit_logs`
 CREATE TABLE IF NOT EXISTS audit_logs (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNSIGNED NULL,
@@ -93,6 +99,7 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     KEY idx_audit_action (action)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Tabela `failed_logins` | Table `failed_logins`
 CREATE TABLE IF NOT EXISTS failed_logins (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
@@ -103,6 +110,7 @@ CREATE TABLE IF NOT EXISTS failed_logins (
     KEY idx_failed_email_time (email, attempted_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Tabela `session_logs` | Table `session_logs`
 CREATE TABLE IF NOT EXISTS session_logs (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNSIGNED NULL,
@@ -115,6 +123,7 @@ CREATE TABLE IF NOT EXISTS session_logs (
     KEY idx_session_logs_user_time (user_id, created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Tabela `webhook_logs` | Table `webhook_logs`
 CREATE TABLE IF NOT EXISTS webhook_logs (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     event_type VARCHAR(50) NOT NULL,
@@ -128,6 +137,7 @@ CREATE TABLE IF NOT EXISTS webhook_logs (
     KEY idx_webhook_processed (processed)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Tabela `user_settings` | Table `user_settings`
 CREATE TABLE IF NOT EXISTS user_settings (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNSIGNED NOT NULL,
@@ -139,6 +149,7 @@ CREATE TABLE IF NOT EXISTS user_settings (
     CONSTRAINT fk_user_settings_user FOREIGN KEY (user_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Tabela `system_settings` | Table `system_settings`
 CREATE TABLE IF NOT EXISTS system_settings (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     setting_key VARCHAR(100) NOT NULL,

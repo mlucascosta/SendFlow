@@ -1,8 +1,18 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Front controller e roteador simples do SendFlow.
+ * SendFlow front controller and simple router.
+ *
+ * Mantém o ponto de entrada único e seleciona a view
+ * com base na rota requisitada.
+ * Keeps a single entry point and selects the target view
+ * based on the requested route.
+ */
 $route = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 
+/** @var array<string,array{view:string,sidebar:bool,compose:bool,title:string}> $routes */
 $routes = [
     '/' => ['view' => __DIR__ . '/../views/auth/login.php', 'sidebar' => false, 'compose' => false, 'title' => 'Login - SendFlow'],
     '/login' => ['view' => __DIR__ . '/../views/auth/login.php', 'sidebar' => false, 'compose' => false, 'title' => 'Login - SendFlow'],
