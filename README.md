@@ -32,6 +32,16 @@ SendFlow is an open-source self-hosted webmail platform built with plain PHP, fo
 php -S 127.0.0.1:8000 -t public
 ```
 
+## SQL compatibility audit
+
+Run the SQL audit before shipping changes to the installer or schema:
+
+```bash
+php scripts/audit_mysql_compat.php
+```
+
+The audit checks the migration set for PostgreSQL/PLpgSQL-specific constructs and keeps the project aligned with MySQL/MariaDB.
+
 ## Guided onboarding wizard
 
 The installer now provides a personalized six-step onboarding flow:

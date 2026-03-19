@@ -1,9 +1,9 @@
 -- Compatibilidade: MariaDB/MySQL | Compatibility: MariaDB/MySQL
 -- Migration 006: Procedures de segurança | Security procedures
 
-DELIMITER $$
+DELIMITER //
 
-DROP PROCEDURE IF EXISTS sp_seguranca_verificar_rate_limit $$
+DROP PROCEDURE IF EXISTS sp_seguranca_verificar_rate_limit //
 -- Procedure `sp_seguranca_verificar_rate_limit` (MariaDB/MySQL) | Procedure `sp_seguranca_verificar_rate_limit` (MariaDB/MySQL)
 CREATE PROCEDURE sp_seguranca_verificar_rate_limit(
     IN p_email VARCHAR(255),
@@ -30,9 +30,9 @@ BEGIN
         SET p_permitido = 1;
         SET p_mensagem = 'Permitido | Allowed';
     END IF;
-END $$
+END //
 
-DROP PROCEDURE IF EXISTS sp_seguranca_limpar_failed_logins $$
+DROP PROCEDURE IF EXISTS sp_seguranca_limpar_failed_logins //
 -- Procedure `sp_seguranca_limpar_failed_logins` (MariaDB/MySQL) | Procedure `sp_seguranca_limpar_failed_logins` (MariaDB/MySQL)
 CREATE PROCEDURE sp_seguranca_limpar_failed_logins(
     IN p_email VARCHAR(255),
@@ -41,9 +41,9 @@ CREATE PROCEDURE sp_seguranca_limpar_failed_logins(
 BEGIN
     DELETE FROM failed_logins
     WHERE email = p_email OR ip_address = p_ip;
-END $$
+END //
 
-DROP PROCEDURE IF EXISTS sp_seguranca_auditar_acao $$
+DROP PROCEDURE IF EXISTS sp_seguranca_auditar_acao //
 -- Procedure `sp_seguranca_auditar_acao` (MariaDB/MySQL) | Procedure `sp_seguranca_auditar_acao` (MariaDB/MySQL)
 CREATE PROCEDURE sp_seguranca_auditar_acao(
     IN p_user_id INT,
@@ -59,9 +59,9 @@ CREATE PROCEDURE sp_seguranca_auditar_acao(
 BEGIN
     INSERT INTO audit_logs (user_id, session_id, action, entity_type, entity_id, old_values, new_values, ip_address, user_agent)
     VALUES (p_user_id, p_session_id, p_acao, p_entity_type, p_entity_id, p_old, p_new, p_ip, p_ua);
-END $$
+END //
 
-DROP PROCEDURE IF EXISTS sp_seguranca_garbage_collector $$
+DROP PROCEDURE IF EXISTS sp_seguranca_garbage_collector //
 -- Procedure `sp_seguranca_garbage_collector` (MariaDB/MySQL) | Procedure `sp_seguranca_garbage_collector` (MariaDB/MySQL)
 CREATE PROCEDURE sp_seguranca_garbage_collector()
 BEGIN
@@ -73,6 +73,6 @@ BEGIN
     DELETE FROM session_logs WHERE created_at < (NOW() - INTERVAL 30 DAY);
     DELETE FROM webhook_logs WHERE created_at < (NOW() - INTERVAL 30 DAY);
     DELETE FROM audit_logs WHERE created_at < (NOW() - INTERVAL 30 DAY);
-END $$
+END //
 
 DELIMITER ;

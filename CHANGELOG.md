@@ -124,6 +124,7 @@
 - Added optional Groq AI foundations with model fallback and usage tracking schema.
 - Added optional cron-job.org scheduler foundations for managed recurring jobs.
 - Replaced installer placeholders with a real onboarding wizard for MySQL/MariaDB, automatic migrations, admin creation and encrypted Resend setup.
+- Added a MySQL/MariaDB compatibility audit to keep SQL migrations free of PostgreSQL/PLpgSQL-specific constructs.
 - Open-sourced the project with MIT licensing, an English README, and contribution guidelines.
 
 ### Details
@@ -148,6 +149,7 @@
 - >!AI dashboard and AI settings pages for metrics, model routing and scheduler activation.!<
 - >!Managed cron-job.org integration stored in the database and disabled by default until an API key is saved.!<
 - >!Installer now validates MySQL/MariaDB credentials, runs migrations automatically, creates the first admin account and stores the Resend setup securely.!<
+- >!Added a repository-level audit script to detect PostgreSQL/PLpgSQL leftovers in SQL migrations and kept stored routines on MySQL/MariaDB-style delimiters.!<
 - >!MIT license, contribution guide and README rewrite in English.!<
 
 </details>

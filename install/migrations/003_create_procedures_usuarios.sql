@@ -1,9 +1,9 @@
 -- Compatibilidade: MariaDB/MySQL | Compatibility: MariaDB/MySQL
 -- Migration 003: Procedures de usuários | User procedures
 
-DELIMITER $$
+DELIMITER //
 
-DROP PROCEDURE IF EXISTS sp_usuario_criar_primeiro_admin $$
+DROP PROCEDURE IF EXISTS sp_usuario_criar_primeiro_admin //
 -- Procedure `sp_usuario_criar_primeiro_admin` (MariaDB/MySQL) | Procedure `sp_usuario_criar_primeiro_admin` (MariaDB/MySQL)
 CREATE PROCEDURE sp_usuario_criar_primeiro_admin(
     IN p_name VARCHAR(100),
@@ -26,9 +26,9 @@ BEGIN
         SET p_codigo_retorno = 201;
         SET p_mensagem = 'Administrador criado com sucesso | Admin created successfully';
     END IF;
-END $$
+END //
 
-DROP PROCEDURE IF EXISTS sp_usuario_autenticar $$
+DROP PROCEDURE IF EXISTS sp_usuario_autenticar //
 -- Procedure `sp_usuario_autenticar` (MariaDB/MySQL) | Procedure `sp_usuario_autenticar` (MariaDB/MySQL)
 CREATE PROCEDURE sp_usuario_autenticar(
     IN p_email VARCHAR(255),
@@ -60,9 +60,9 @@ BEGIN
         SET p_codigo = 200;
         SET p_mensagem = 'Usuário encontrado | User found';
     END IF;
-END $$
+END //
 
-DROP PROCEDURE IF EXISTS sp_usuario_atualizar_senha $$
+DROP PROCEDURE IF EXISTS sp_usuario_atualizar_senha //
 -- Procedure `sp_usuario_atualizar_senha` (MariaDB/MySQL) | Procedure `sp_usuario_atualizar_senha` (MariaDB/MySQL)
 CREATE PROCEDURE sp_usuario_atualizar_senha(
     IN p_user_id INT,
@@ -86,9 +86,9 @@ BEGIN
 
     SET p_codigo_retorno = 200;
     SET p_mensagem = 'Senha atualizada com sucesso | Password updated successfully';
-END $$
+END //
 
-DROP PROCEDURE IF EXISTS sp_usuario_salvar_resend_key $$
+DROP PROCEDURE IF EXISTS sp_usuario_salvar_resend_key //
 -- Procedure `sp_usuario_salvar_resend_key` (MariaDB/MySQL) | Procedure `sp_usuario_salvar_resend_key` (MariaDB/MySQL)
 CREATE PROCEDURE sp_usuario_salvar_resend_key(
     IN p_user_id INT,
@@ -112,6 +112,6 @@ BEGIN
 
     SET p_codigo_retorno = 200;
     SET p_mensagem = 'Credenciais Resend salvas | Resend credentials saved';
-END $$
+END //
 
 DELIMITER ;

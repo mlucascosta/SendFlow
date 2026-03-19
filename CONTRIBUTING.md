@@ -16,6 +16,7 @@ Thanks for contributing to SendFlow.
 - Describe any schema or migration impact.
 - List manual or automated checks that were run.
 - Update `README.md` and `CHANGELOG.md` when the public behavior changes.
+- Run `php scripts/audit_mysql_compat.php` when changing SQL migrations or stored routines.
 
 ## AI integrations
 
