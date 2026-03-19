@@ -23,8 +23,10 @@ $routes = [
     '/emails/compose' => ['view' => __DIR__ . '/../views/emails/compose.php', 'sidebar' => true, 'compose' => true, 'title' => 'Compor - SendFlow'],
     '/settings' => ['view' => __DIR__ . '/../views/settings/index.php', 'sidebar' => true, 'compose' => true, 'title' => 'Configurações - SendFlow'],
     '/settings/resend' => ['view' => __DIR__ . '/../views/settings/resend.php', 'sidebar' => true, 'compose' => true, 'title' => 'Resend - SendFlow'],
+    '/settings/ai' => ['view' => __DIR__ . '/../views/settings/ai.php', 'sidebar' => true, 'compose' => true, 'title' => 'AI Settings - SendFlow'],
     '/settings/sessions' => ['view' => __DIR__ . '/../views/settings/sessions.php', 'sidebar' => true, 'compose' => true, 'title' => 'Sessões - SendFlow'],
     '/settings/audit' => ['view' => __DIR__ . '/../views/settings/audit.php', 'sidebar' => true, 'compose' => true, 'title' => 'Auditoria - SendFlow'],
+    '/dashboard/ai' => ['view' => __DIR__ . '/../views/dashboard/ai.php', 'sidebar' => true, 'compose' => true, 'title' => 'AI Dashboard - SendFlow'],
 ];
 
 if (!isset($routes[$route])) {

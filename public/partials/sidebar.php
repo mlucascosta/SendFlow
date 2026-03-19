@@ -4,6 +4,8 @@
     <a href="/emails/sent" class="sidebar-link <?= ($currentPage ?? '')==='sent' ? 'active' : '' ?>"><ion-icon name="send-outline"></ion-icon>Enviados</a>
     <a href="/emails/drafts" class="sidebar-link <?= ($currentPage ?? '')==='drafts' ? 'active' : '' ?>"><ion-icon name="document-text-outline"></ion-icon>Rascunhos</a>
     <a href="/dashboard" class="sidebar-link <?= ($currentPage ?? '')==='dashboard' ? 'active' : '' ?>"><ion-icon name="stats-chart-outline"></ion-icon>Dashboard</a>
+    <a href="/dashboard/ai" class="sidebar-link <?= ($currentPage ?? '')==='ai-dashboard' ? 'active' : '' ?>"><ion-icon name="sparkles-outline"></ion-icon>AI Dashboard</a>
     <a href="/settings" class="sidebar-link <?= ($currentPage ?? '')==='settings' ? 'active' : '' ?>"><ion-icon name="settings-outline"></ion-icon>Configurações</a>
+    <a href="/settings/ai" class="sidebar-link <?= ($currentPage ?? '')==='ai-settings' ? 'active' : '' ?>"><ion-icon name="hardware-chip-outline"></ion-icon>AI & Cron</a>
   </div>
 </aside>
