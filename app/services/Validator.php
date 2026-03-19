@@ -27,4 +27,43 @@ class Validator
     {
         return trim($value) !== '';
     }
+
+    /**
+     * Valida domínio simples sem protocolo.
+     * Validates a simple domain without protocol.
+     */
+    public static function domain(string $domain): bool
+    {
+        return (bool) preg_match('/^(?=.{1,253}$)(?!-)(?:[a-z0-9-]{1,63}\.)+[a-z]{2,63}$/i', trim($domain));
+    }
+
+    /**
+     * Valida senha mínima para onboarding inicial.
+     * Validates minimum password strength for initial onboarding.
+     */
+    public static function password(string $password): bool
+    {
+        if (strlen($password) < 12) {
+            return false;
+        }
+
+        return preg_match('/[A-Z]/', $password) === 1
+            && preg_match('/[a-z]/', $password) === 1
+            && preg_match('/[0-9]/', $password) === 1;
+    }
+
+    /**
+     * Valida hostname/IP de banco.
+     * Validates database hostname/IP.
+     */
+    public static function host(string $host): bool
+    {
+        $host = trim($host);
+        if ($host === 'localhost') {
+            return true;
+        }
+
+        return filter_var($host, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME) !== false
+            || filter_var($host, FILTER_VALIDATE_IP) !== false;
+    }
 }

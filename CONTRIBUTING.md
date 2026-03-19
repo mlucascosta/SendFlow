@@ -1,0 +1,37 @@
+# Contributing to SendFlow
+
+Thanks for contributing to SendFlow.
+
+## Development principles
+
+- Prefer small, reviewable pull requests.
+- Keep integrations optional by default.
+- Do not require vendor lock-in for core mail flows.
+- Treat inbound email handling as security-sensitive code.
+- Store third-party API credentials encrypted when they must live in the database.
+
+## Pull requests
+
+- Include a short summary of the change.
+- Describe any schema or migration impact.
+- List manual or automated checks that were run.
+- Update `README.md` and `CHANGELOG.md` when the public behavior changes.
+
+## AI integrations
+
+- Groq support must remain disabled until the user stores an API key in the database.
+- Add new AI features behind explicit feature flags.
+- Define fallback models so the product can degrade gracefully on rate limits or capacity issues.
+- Log enough metadata for auditing without storing unnecessary sensitive prompt data.
+
+## Scheduler integrations
+
+- cron-job.org is the default managed scheduler target for recurring background jobs.
+- New recurring jobs should be represented in `managed_cron_jobs`.
+- Jobs must fail safely when the scheduler integration is disabled or unconfigured.
+
+## Security
+
+- Validate webhook signatures before processing payloads.
+- Keep `noreply` addresses blocked for inbound mail.
+- Prefer allowlists and explicit routing over broad permissive rules.
