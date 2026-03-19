@@ -5,7 +5,7 @@ SendFlow is an open-source self-hosted webmail platform built with plain PHP, fo
 ## Current scope
 
 - PHP front controller with lightweight page routing.
-- SQL-first installation flow for MySQL/MariaDB.
+- Installation flow with MySQL/MariaDB and automatic SQLite fallback for local use.
 - Secure inbound webhook foundation for Resend.
 - Optional Groq-powered AI features stored and configured from the database.
 - Optional cron-job.org-based managed scheduler for every recurring background job.
@@ -47,15 +47,33 @@ The audit checks the migration set for PostgreSQL/PLpgSQL-specific constructs an
 The installer now provides a personalized six-step onboarding flow:
 
 1. welcome and security overview,
-2. MySQL/MariaDB credentials,
+2. MySQL/MariaDB credentials **or automatic SQLite fallback when the fields are left empty**,
 3. first administrator creation,
 4. product tour,
 5. Resend domain + API key storage,
 6. final handoff to login.
 
-During step 2, the installer validates the MySQL/MariaDB connection, runs all migrations automatically, creates `schema_migrations`, and writes `config/env.php`.
+During step 2, the installer validates the chosen database path, runs the correct migrations automatically, creates `schema_migrations`, and writes `config/env.php`.
 During step 3, the first administrator email/password is stored for SendFlow login.
 During step 5, the Resend domain and API key are saved into the user's own database, with the API key encrypted before storage.
+
+## Adapted AI workflow for contributors and agents
+
+SendFlow now includes a project-adapted workflow inspired by **Pster's AI Workflow**: docs-first, phase-based, and explicit about brainstorming, planning, quality gates, execution, review and documentation capture.
+
+Use:
+
+```bash
+./scripts/workflow-start.sh <change-slug>
+./scripts/workflow-status.sh
+```
+
+Key docs live in:
+
+- `docs/workflow/README.md`
+- `docs/workflow/foundation/`
+- `docs/workflow/runbooks/`
+- `docs/workflow/templates/change/`
 
 ## Secure inbound email policy
 
@@ -144,7 +162,7 @@ cron-job.org is also disabled by default.
 
 ## Installation security notes
 
-- The installer only supports MySQL/MariaDB.
+- The installer supports MySQL/MariaDB and can fall back to SQLite when the database step is left blank.
 - Installation forms are CSRF-protected.
 - Database hosts, domains, emails and passwords are validated before persistence.
 - Admin passwords are hashed with PHP `password_hash()`.
