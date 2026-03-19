@@ -8,6 +8,11 @@
       </span>
       <h1 class="mt-4 text-3xl font-semibold tracking-tight">Configurações operacionais alinhadas ao novo design system.</h1>
       <p class="mt-2 max-w-2xl text-sm leading-6 text-carbon-textSubtle dark:text-carbon-textSubtleDark">Entradas, ações e estados agora compartilham tokens visuais consistentes para Resend, IA, sessões e auditoria.</p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a href="/settings/resend" class="btn-secondary text-sm">Abrir Resend</a>
+        <a href="/settings/ai" class="btn-secondary text-sm">Abrir AI settings</a>
+        <a href="/dashboard/ai" class="btn-secondary text-sm">Ver AI dashboard</a>
+      </div>
     </div>
 
     <section class="surface-card p-6">

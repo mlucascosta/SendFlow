@@ -1,11 +1,17 @@
 <?php
-$navItems = [
+$primaryNavItems = [
     ['href' => '/dashboard', 'icon' => 'grid-outline', 'label' => 'Dashboard', 'section' => 'dashboard'],
     ['href' => '/emails/inbox', 'icon' => 'mail-outline', 'label' => 'Inbox', 'section' => 'inbox'],
     ['href' => '/emails/sent', 'icon' => 'paper-plane-outline', 'label' => 'Enviados', 'section' => 'sent'],
     ['href' => '/emails/drafts', 'icon' => 'create-outline', 'label' => 'Rascunhos', 'section' => 'drafts'],
     ['href' => '/emails/compose', 'icon' => 'sparkles-outline', 'label' => 'Compor', 'section' => 'compose'],
     ['href' => '/settings', 'icon' => 'settings-outline', 'label' => 'Configurações', 'section' => 'settings'],
+];
+
+$featureNavItems = [
+    ['href' => '/settings/resend', 'icon' => 'paper-plane-outline', 'label' => 'Resend setup'],
+    ['href' => '/settings/ai', 'icon' => 'hardware-chip-outline', 'label' => 'AI settings'],
+    ['href' => '/dashboard/ai', 'icon' => 'sparkles-outline', 'label' => 'AI dashboard'],
 ];
 ?>
 <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-[4.5rem] left-0 z-30 flex w-[18rem] flex-col border-r border-carbon-border/70 bg-carbon-surface/95 px-4 py-5 backdrop-blur transition-transform duration-300 dark:border-carbon-borderDark/60 dark:bg-carbon-surfaceDark/95 md:static md:translate-x-0">
@@ -21,13 +27,25 @@ $navItems = [
   </div>
 
   <nav class="space-y-1.5">
-    <?php foreach ($navItems as $item): ?>
+    <?php foreach ($primaryNavItems as $item): ?>
       <a href="<?= htmlspecialchars($item['href'], ENT_QUOTES, 'UTF-8') ?>" class="sidebar-link <?= ($currentSection ?? '') === $item['section'] ? 'active' : '' ?>">
         <ion-icon name="<?= htmlspecialchars($item['icon'], ENT_QUOTES, 'UTF-8') ?>"></ion-icon>
         <span><?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?></span>
       </a>
     <?php endforeach; ?>
   </nav>
+
+  <div class="mt-6 rounded-3xl border border-carbon-border bg-carbon-layer p-4 dark:border-carbon-borderDark dark:bg-carbon-layerDark">
+    <p class="text-xs font-semibold uppercase tracking-[0.22em] text-carbon-textSubtle dark:text-carbon-textSubtleDark">Acessos rápidos</p>
+    <div class="mt-3 space-y-1.5">
+      <?php foreach ($featureNavItems as $item): ?>
+        <a href="<?= htmlspecialchars($item['href'], ENT_QUOTES, 'UTF-8') ?>" class="sidebar-link !min-h-[2.75rem] !px-3 !py-2 text-sm">
+          <ion-icon name="<?= htmlspecialchars($item['icon'], ENT_QUOTES, 'UTF-8') ?>"></ion-icon>
+          <span><?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?></span>
+        </a>
+      <?php endforeach; ?>
+    </div>
+  </div>
 
   <div class="mt-6 grid gap-3">
     <div class="rounded-3xl border border-carbon-border bg-carbon-layer p-4 dark:border-carbon-borderDark dark:bg-carbon-layerDark">

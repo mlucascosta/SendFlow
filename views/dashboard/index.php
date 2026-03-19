@@ -23,6 +23,11 @@
         </div>
       </div>
     </div>
+    <div class="mt-5 flex flex-wrap gap-3">
+      <a href="/dashboard/ai" class="btn-secondary text-sm">Abrir AI dashboard</a>
+      <a href="/settings/ai" class="btn-secondary text-sm">Configurar IA</a>
+      <a href="/settings/resend" class="btn-secondary text-sm">Revisar Resend</a>
+    </div>
   </div>
 
   <div class="grid gap-4 xl:grid-cols-4 md:grid-cols-2">
