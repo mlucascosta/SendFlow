@@ -20,7 +20,7 @@ class Installer
     public function runMigrations(array $databaseConfig, string $migrationsDir): array
     {
         $pdo = Database::connection($databaseConfig);
-        $this->ensureMigrationTable($pdo);
+        $this->ensureMigrationTable($pdo, $databaseConfig);
 
         $files = glob(rtrim($migrationsDir, '/') . '/*.sql') ?: [];
         sort($files, SORT_STRING);
@@ -51,6 +51,22 @@ class Installer
      */
     public function buildEnvConfig(array $databaseConfig): array
     {
+        $driver = strtolower((string) ($databaseConfig['driver'] ?? 'mysql'));
+        $databaseSection = [
+            'driver' => $driver,
+            'charset' => 'utf8mb4',
+        ];
+
+        if ($driver === 'sqlite') {
+            $databaseSection['path'] = (string) $databaseConfig['path'];
+        } else {
+            $databaseSection['host'] = (string) $databaseConfig['host'];
+            $databaseSection['port'] = (int) $databaseConfig['port'];
+            $databaseSection['database'] = (string) $databaseConfig['database'];
+            $databaseSection['username'] = (string) $databaseConfig['username'];
+            $databaseSection['password'] = (string) $databaseConfig['password'];
+        }
+
         return [
             'app' => [
                 'name' => 'SendFlow',
@@ -62,16 +78,45 @@ class Installer
             'resend' => [
                 'webhook_secret' => bin2hex(random_bytes(24)),
             ],
-            'database' => [
-                'driver' => 'mysql',
-                'host' => (string) $databaseConfig['host'],
-                'port' => (int) $databaseConfig['port'],
-                'database' => (string) $databaseConfig['database'],
-                'username' => (string) $databaseConfig['username'],
-                'password' => (string) $databaseConfig['password'],
-                'charset' => 'utf8mb4',
-            ],
+            'database' => $databaseSection,
         ];
+    }
+
+    /**
+     * @param array<string,mixed> $databaseInput
+     */
+    public function resolveDatabaseConfig(array $databaseInput, string $projectRoot): array
+    {
+        if ($this->shouldUseSqlite($databaseInput)) {
+            return [
+                'driver' => 'sqlite',
+                'path' => $this->prepareSqlitePath($projectRoot),
+                'charset' => 'utf8mb4',
+            ];
+        }
+
+        return [
+            'driver' => 'mysql',
+            'host' => trim((string) ($databaseInput['host'] ?? '')),
+            'port' => (int) ($databaseInput['port'] ?? 3306),
+            'database' => trim((string) ($databaseInput['database'] ?? '')),
+            'username' => trim((string) ($databaseInput['username'] ?? '')),
+            'password' => (string) ($databaseInput['password'] ?? ''),
+            'charset' => 'utf8mb4',
+        ];
+    }
+
+    /**
+     * @param array<string,mixed> $databaseConfig
+     */
+    public function getMigrationsDirectory(array $databaseConfig, string $projectRoot): string
+    {
+        $driver = strtolower((string) ($databaseConfig['driver'] ?? 'mysql'));
+        if ($driver === 'sqlite') {
+            return rtrim($projectRoot, '/') . '/install/migrations/sqlite';
+        }
+
+        return rtrim($projectRoot, '/') . '/install/migrations';
     }
 
     /**
@@ -142,9 +187,9 @@ class Installer
             'resend_api_key_last_digits' => $lastDigits,
         ]);
 
-        $this->upsertSystemSetting($pdo, 'installation_completed_at', date('c'));
-        $this->upsertSystemSetting($pdo, 'mail_driver', 'resend');
-        $this->upsertSystemSetting($pdo, 'resend_domain', strtolower(trim($domain)));
+        $this->upsertSystemSetting($pdo, $databaseConfig, 'installation_completed_at', date('c'));
+        $this->upsertSystemSetting($pdo, $databaseConfig, 'mail_driver', 'resend');
+        $this->upsertSystemSetting($pdo, $databaseConfig, 'resend_domain', strtolower(trim($domain)));
     }
 
     /**
@@ -153,8 +198,7 @@ class Installer
     public function installationAlreadyConfigured(array $databaseConfig): bool
     {
         $pdo = Database::connection($databaseConfig);
-        $stmt = $pdo->query("SHOW TABLES LIKE 'users'");
-        if ($stmt === false || $stmt->fetch() === false) {
+        if (!$this->tableExists($pdo, $databaseConfig, 'users')) {
             return false;
         }
 
@@ -163,8 +207,54 @@ class Installer
         return $admin !== false && $admin->fetch() !== false;
     }
 
-    private function ensureMigrationTable(PDO $pdo): void
+    /**
+     * @param array<string,mixed> $databaseInput
+     */
+    public function shouldUseSqlite(array $databaseInput): bool
     {
+        $fields = [
+            trim((string) ($databaseInput['host'] ?? '')),
+            trim((string) ($databaseInput['database'] ?? '')),
+            trim((string) ($databaseInput['username'] ?? '')),
+            trim((string) ($databaseInput['password'] ?? '')),
+            trim((string) ($databaseInput['port'] ?? '')),
+        ];
+
+        foreach ($fields as $field) {
+            if ($field !== '') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function prepareSqlitePath(string $projectRoot): string
+    {
+        $directory = rtrim($projectRoot, '/') . '/storage/database';
+        if (!is_dir($directory) && !mkdir($directory, 0700, true) && !is_dir($directory)) {
+            throw new RuntimeException('Unable to create SQLite storage directory.');
+        }
+
+        @chmod($directory, 0700);
+
+        return $directory . '/sendflow.db';
+    }
+
+    private function ensureMigrationTable(PDO $pdo, array $databaseConfig): void
+    {
+        if (strtolower((string) ($databaseConfig['driver'] ?? 'mysql')) === 'sqlite') {
+            $pdo->exec(
+                'CREATE TABLE IF NOT EXISTS schema_migrations (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    migration_name TEXT NOT NULL UNIQUE,
+                    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+                )'
+            );
+
+            return;
+        }
+
         $pdo->exec(
             'CREATE TABLE IF NOT EXISTS schema_migrations (
                 id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -205,14 +295,14 @@ class Installer
                 $statement = trim(substr($buffer, 0, $position));
                 $buffer = substr($buffer, $position + strlen($delimiter));
 
-                if ($statement !== '') {
+                if ($statement !== '' && !$this->isCommentOnlyStatement($statement)) {
                     $statements[] = $statement;
                 }
             }
         }
 
         $remainder = trim($buffer);
-        if ($remainder !== '') {
+        if ($remainder !== '' && !$this->isCommentOnlyStatement($remainder)) {
             $statements[] = $remainder;
         }
 
@@ -224,17 +314,66 @@ class Installer
         return 'base64:' . base64_encode(random_bytes(32));
     }
 
-    private function upsertSystemSetting(PDO $pdo, string $key, string $value): void
+    private function upsertSystemSetting(PDO $pdo, array $databaseConfig, string $key, string $value): void
     {
-        $stmt = $pdo->prepare(
-            'INSERT INTO system_settings (setting_key, setting_value, setting_type)
-             VALUES (:setting_key, :setting_value, :setting_type)
-             ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), updated_at = CURRENT_TIMESTAMP'
-        );
+        if (strtolower((string) ($databaseConfig['driver'] ?? 'mysql')) === 'sqlite') {
+            $stmt = $pdo->prepare(
+                'INSERT INTO system_settings (setting_key, setting_value, setting_type, updated_at)
+                 VALUES (:setting_key, :setting_value, :setting_type, CURRENT_TIMESTAMP)
+                 ON CONFLICT(setting_key) DO UPDATE SET
+                    setting_value = excluded.setting_value,
+                    setting_type = excluded.setting_type,
+                    updated_at = CURRENT_TIMESTAMP'
+            );
+        } else {
+            $stmt = $pdo->prepare(
+                'INSERT INTO system_settings (setting_key, setting_value, setting_type)
+                 VALUES (:setting_key, :setting_value, :setting_type)
+                 ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), updated_at = CURRENT_TIMESTAMP'
+            );
+        }
+
         $stmt->execute([
             'setting_key' => $key,
             'setting_value' => $value,
             'setting_type' => 'string',
         ]);
+    }
+
+    private function tableExists(PDO $pdo, array $databaseConfig, string $tableName): bool
+    {
+        if (strtolower((string) ($databaseConfig['driver'] ?? 'mysql')) === 'sqlite') {
+            $stmt = $pdo->prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = :name LIMIT 1");
+            $stmt->execute(['name' => $tableName]);
+
+            return $stmt->fetch() !== false;
+        }
+
+        $stmt = $pdo->prepare('SHOW TABLES LIKE :table_name');
+        $stmt->execute(['table_name' => $tableName]);
+
+        return $stmt->fetch() !== false;
+    }
+
+    private function isCommentOnlyStatement(string $statement): bool
+    {
+        $trimmed = trim($statement);
+        if ($trimmed === '') {
+            return true;
+        }
+
+        $lines = preg_split('/\R/', $trimmed) ?: [];
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if ($line === '') {
+                continue;
+            }
+
+            if (!str_starts_with($line, '--') && !str_starts_with($line, '/*') && !str_starts_with($line, '*/')) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

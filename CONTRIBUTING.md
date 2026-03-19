@@ -36,3 +36,23 @@ Thanks for contributing to SendFlow.
 - Validate webhook signatures before processing payloads.
 - Keep `noreply` addresses blocked for inbound mail.
 - Prefer allowlists and explicit routing over broad permissive rules.
+
+
+## Adapted AI workflow for SendFlow
+
+Before medium/large changes, prefer the repository workflow scaffold:
+
+```bash
+./scripts/workflow-start.sh <change-slug>
+./scripts/workflow-status.sh
+```
+
+Expected flow:
+
+1. brainstorm scope and constraints;
+2. produce a phased plan;
+3. apply quality gates when the change touches installer/schema/auth/integrations;
+4. execute one phase at a time;
+5. review and capture reusable learnings in docs.
+
+Keep `docs/workflow/foundation/` up to date when changing architecture, integrations, environments or glossary-level project concepts.

@@ -13,8 +13,8 @@ declare(strict_types=1);
     <div class="rounded-2xl border border-neutral-200 p-4">
       <h3 class="font-semibold">What happens in this wizard</h3>
       <ul class="list-disc ml-5 mt-3 text-sm text-neutral-500 space-y-1">
-        <li>Connect to a MySQL/MariaDB database.</li>
-        <li>Run all migrations automatically.</li>
+        <li>Connect to a MySQL/MariaDB database or leave the fields empty to use SQLite.</li>
+        <li>Run the correct migrations automatically for the chosen driver.</li>
         <li>Create the first SendFlow admin account.</li>
         <li>Store the Resend domain and API key in your own database.</li>
       </ul>
@@ -25,7 +25,7 @@ declare(strict_types=1);
         <li>CSRF-protected installation forms.</li>
         <li>Password hashing for the first admin user.</li>
         <li>Encrypted storage for the Resend API key.</li>
-        <li>MySQL/MariaDB-only installation path.</li>
+        <li>SQLite fallback stored under <code>storage/database</code> with restrictive permissions.</li>
       </ul>
     </div>
   </div>

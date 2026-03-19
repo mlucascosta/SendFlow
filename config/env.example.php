@@ -25,12 +25,13 @@ return [
         'webhook_secret' => 'whsec_change_me',
     ],
     'database' => [
-        'driver' => 'mysql',
+        'driver' => 'mysql', // or sqlite
         'host' => 'localhost',
         'port' => 3306,
         'database' => 'sendflow_db',
         'username' => 'sendflow_user',
         'password' => '',
         'charset' => 'utf8mb4',
+        // 'path' => __DIR__ . '/../storage/database/sendflow.db',
     ],
 ];
