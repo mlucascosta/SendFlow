@@ -1,9 +1,9 @@
 -- Compatibilidade: MariaDB/MySQL | Compatibility: MariaDB/MySQL
 -- Migration 007: Procedures de integração Resend | Resend integration procedures
 
-DELIMITER $$
+DELIMITER //
 
-DROP PROCEDURE IF EXISTS sp_resend_webhook_receber $$
+DROP PROCEDURE IF EXISTS sp_resend_webhook_receber //
 -- Procedure `sp_resend_webhook_receber` (MariaDB/MySQL) | Procedure `sp_resend_webhook_receber` (MariaDB/MySQL)
 CREATE PROCEDURE sp_resend_webhook_receber(
     IN p_event_type VARCHAR(50),
@@ -32,9 +32,9 @@ BEGIN
     UPDATE webhook_logs SET processed = 1 WHERE id = p_webhook_id;
     SET p_codigo = 200;
     SET p_mensagem = 'Webhook processado | Webhook processed';
-END $$
+END //
 
-DROP PROCEDURE IF EXISTS sp_resend_webhooks_pendentes $$
+DROP PROCEDURE IF EXISTS sp_resend_webhooks_pendentes //
 -- Procedure `sp_resend_webhooks_pendentes` (MariaDB/MySQL) | Procedure `sp_resend_webhooks_pendentes` (MariaDB/MySQL)
 CREATE PROCEDURE sp_resend_webhooks_pendentes()
 BEGIN
@@ -43,9 +43,9 @@ BEGIN
     WHERE processed = 0
     ORDER BY created_at ASC
     LIMIT 100;
-END $$
+END //
 
-DROP PROCEDURE IF EXISTS sp_resend_testar_conexao $$
+DROP PROCEDURE IF EXISTS sp_resend_testar_conexao //
 -- Procedure `sp_resend_testar_conexao` (MariaDB/MySQL) | Procedure `sp_resend_testar_conexao` (MariaDB/MySQL)
 CREATE PROCEDURE sp_resend_testar_conexao(
     IN p_user_id INT,
@@ -63,6 +63,6 @@ BEGIN
         SET p_domain_verificado = 1;
         SET p_mensagem = 'Domínio configurado no perfil | Domain configured in profile';
     END IF;
-END $$
+END //
 
 DELIMITER ;

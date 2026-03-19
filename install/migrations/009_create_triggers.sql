@@ -1,9 +1,9 @@
 -- Compatibilidade: MariaDB/MySQL | Compatibility: MariaDB/MySQL
 -- Migration 009: Triggers automáticos | Automatic triggers
 
-DELIMITER $$
+DELIMITER //
 
-DROP TRIGGER IF EXISTS trg_users_update_audit $$
+DROP TRIGGER IF EXISTS trg_users_update_audit //
 -- Trigger `trg_users_update_audit` (MariaDB/MySQL) | Trigger `trg_users_update_audit` (MariaDB/MySQL)
 CREATE TRIGGER trg_users_update_audit
 AFTER UPDATE ON users
@@ -20,9 +20,9 @@ BEGIN
             JSON_OBJECT('email', NEW.email, 'is_active', NEW.is_active, 'role', NEW.role)
         );
     END IF;
-END $$
+END //
 
-DROP TRIGGER IF EXISTS trg_users_soft_delete $$
+DROP TRIGGER IF EXISTS trg_users_soft_delete //
 -- Trigger `trg_users_soft_delete` (MariaDB/MySQL) | Trigger `trg_users_soft_delete` (MariaDB/MySQL)
 CREATE TRIGGER trg_users_soft_delete
 AFTER UPDATE ON users
@@ -33,9 +33,9 @@ BEGIN
         SET is_active = 0
         WHERE user_id = NEW.id AND is_active = 1;
     END IF;
-END $$
+END //
 
-DROP TRIGGER IF EXISTS trg_emails_insert_audit $$
+DROP TRIGGER IF EXISTS trg_emails_insert_audit //
 -- Trigger `trg_emails_insert_audit` (MariaDB/MySQL) | Trigger `trg_emails_insert_audit` (MariaDB/MySQL)
 CREATE TRIGGER trg_emails_insert_audit
 AFTER INSERT ON emails
@@ -50,9 +50,9 @@ BEGIN
         NEW.id,
         JSON_OBJECT('to', NEW.to_email, 'subject', NEW.subject, 'status', NEW.status)
     );
-END $$
+END //
 
-DROP TRIGGER IF EXISTS trg_failed_logins_threshold $$
+DROP TRIGGER IF EXISTS trg_failed_logins_threshold //
 -- Trigger `trg_failed_logins_threshold` (MariaDB/MySQL) | Trigger `trg_failed_logins_threshold` (MariaDB/MySQL)
 CREATE TRIGGER trg_failed_logins_threshold
 AFTER INSERT ON failed_logins
@@ -76,6 +76,6 @@ BEGIN
             NEW.user_agent
         );
     END IF;
-END $$
+END //
 
 DELIMITER ;

@@ -117,6 +117,45 @@
 
 ---
 
+## 2026-03-19
+
+### Summary
+- Hardened inbound email policy enforcement for Resend webhooks.
+- Added optional Groq AI foundations with model fallback and usage tracking schema.
+- Added optional cron-job.org scheduler foundations for managed recurring jobs.
+- Replaced installer placeholders with a real onboarding wizard for MySQL/MariaDB, automatic migrations, admin creation and encrypted Resend setup.
+- Added a MySQL/MariaDB compatibility audit to keep SQL migrations free of PostgreSQL/PLpgSQL-specific constructs.
+- Open-sourced the project with MIT licensing, an English README, and contribution guidelines.
+
+### Details
+
+<details>
+  <summary><strong>🤖 Commit 04c8929 — Add inbound email policy enforcement</strong></summary>
+
+- **Date:** `2026-03-19`
+- **Message:** `Add inbound email policy enforcement`
+
+#### Changes
+- >!Secure inbound webhook processing with mailbox allowlists, noreply blocking and reply-only controls.!<
+- >!Added schema for inbound mailboxes and rejected inbound tracking.!<
+
+</details>
+
+<details>
+  <summary><strong>🧠 Pending current branch work — Groq AI + cron-job.org foundations</strong></summary>
+
+#### Planned/implemented scope in this branch
+- >!Optional Groq integration stored in the database and disabled by default until an API key is saved.!<
+- >!AI dashboard and AI settings pages for metrics, model routing and scheduler activation.!<
+- >!Managed cron-job.org integration stored in the database and disabled by default until an API key is saved.!<
+- >!Installer now validates MySQL/MariaDB credentials, runs migrations automatically, creates the first admin account and stores the Resend setup securely.!<
+- >!Added a repository-level audit script to detect PostgreSQL/PLpgSQL leftovers in SQL migrations and kept stored routines on MySQL/MariaDB-style delimiters.!<
+- >!MIT license, contribution guide and README rewrite in English.!<
+
+</details>
+
+---
+
 ## Convenções deste changelog
 
 ### Summary
@@ -128,4 +167,3 @@
 ### Accordion + Spoiler
 - >!Cada bloco de commit está dentro de `<details>`/`<summary>` (accordion).!<
 - >!Cada item informativo usa spoiler Markdown (`>! ... !<`) conforme solicitado.!<
-

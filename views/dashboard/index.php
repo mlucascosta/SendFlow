@@ -9,6 +9,6 @@
       <h2 class="font-semibold mb-3">Emails Recentes</h2>
       <?php for($i=0;$i<5;$i++): ?><div class="email-row flex items-center justify-between p-3 border-b border-neutral-200 dark:border-neutral-700"><span>Cliente <?= $i+1 ?></span><span class="text-xs text-neutral-500">09:<?= 10+$i ?></span></div><?php endfor; ?>
     </div>
-    <div class="card"><h2 class="font-semibold mb-3">Ações Rápidas</h2><div class="space-y-2"><a class="btn-ghost w-full" href="/emails/compose">Novo Email</a><a class="btn-ghost w-full" href="/settings/resend">Configurar Resend</a></div></div>
+    <div class="card"><h2 class="font-semibold mb-3">Ações Rápidas</h2><div class="space-y-2"><a class="btn-ghost w-full" href="/emails/compose">Novo Email</a><a class="btn-ghost w-full" href="/settings/resend">Configurar Resend</a><a class="btn-ghost w-full" href="/settings/ai">Configurar AI & Cron</a><a class="btn-ghost w-full" href="/dashboard/ai">Abrir AI Dashboard</a></div></div>
   </div>
 </div>

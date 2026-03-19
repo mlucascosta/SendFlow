@@ -1,9 +1,9 @@
 -- Compatibilidade: MariaDB/MySQL | Compatibility: MariaDB/MySQL
 -- Migration 005: Procedures de email | Email procedures
 
-DELIMITER $$
+DELIMITER //
 
-DROP PROCEDURE IF EXISTS sp_email_enviar $$
+DROP PROCEDURE IF EXISTS sp_email_enviar //
 -- Procedure `sp_email_enviar` (MariaDB/MySQL) | Procedure `sp_email_enviar` (MariaDB/MySQL)
 CREATE PROCEDURE sp_email_enviar(
     IN p_user_id INT,
@@ -27,9 +27,9 @@ BEGIN
     SET p_email_id = LAST_INSERT_ID();
     SET p_codigo_retorno = 201;
     SET p_mensagem = 'Email preparado para envio | Email queued for sending';
-END $$
+END //
 
-DROP PROCEDURE IF EXISTS sp_email_atualizar_status_apos_envio $$
+DROP PROCEDURE IF EXISTS sp_email_atualizar_status_apos_envio //
 -- Procedure `sp_email_atualizar_status_apos_envio` (MariaDB/MySQL) | Procedure `sp_email_atualizar_status_apos_envio` (MariaDB/MySQL)
 CREATE PROCEDURE sp_email_atualizar_status_apos_envio(
     IN p_email_id INT,
@@ -49,9 +49,9 @@ BEGIN
         INSERT INTO audit_logs (action, entity_type, entity_id, new_values)
         VALUES ('email_send_error', 'emails', p_email_id, JSON_OBJECT('error', p_error));
     END IF;
-END $$
+END //
 
-DROP PROCEDURE IF EXISTS sp_email_listar_por_status $$
+DROP PROCEDURE IF EXISTS sp_email_listar_por_status //
 -- Procedure `sp_email_listar_por_status` (MariaDB/MySQL) | Procedure `sp_email_listar_por_status` (MariaDB/MySQL)
 CREATE PROCEDURE sp_email_listar_por_status(
     IN p_user_id INT,
@@ -68,9 +68,9 @@ BEGIN
       AND (p_direction IS NULL OR direction = p_direction)
     ORDER BY created_at DESC
     LIMIT p_limit_rows OFFSET p_offset_rows;
-END $$
+END //
 
-DROP PROCEDURE IF EXISTS sp_email_buscar_por_id $$
+DROP PROCEDURE IF EXISTS sp_email_buscar_por_id //
 -- Procedure `sp_email_buscar_por_id` (MariaDB/MySQL) | Procedure `sp_email_buscar_por_id` (MariaDB/MySQL)
 CREATE PROCEDURE sp_email_buscar_por_id(
     IN p_email_id INT,
@@ -81,9 +81,9 @@ BEGIN
     FROM emails
     WHERE id = p_email_id AND user_id = p_user_id
     LIMIT 1;
-END $$
+END //
 
-DROP PROCEDURE IF EXISTS sp_email_registrar_abertura $$
+DROP PROCEDURE IF EXISTS sp_email_registrar_abertura //
 -- Procedure `sp_email_registrar_abertura` (MariaDB/MySQL) | Procedure `sp_email_registrar_abertura` (MariaDB/MySQL)
 CREATE PROCEDURE sp_email_registrar_abertura(
     IN p_resend_message_id VARCHAR(255)
@@ -93,6 +93,6 @@ BEGIN
     SET opens = opens + 1,
         updated_at = CURRENT_TIMESTAMP
     WHERE resend_message_id = p_resend_message_id;
-END $$
+END //
 
 DELIMITER ;

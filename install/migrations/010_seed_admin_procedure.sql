@@ -1,9 +1,9 @@
 -- Compatibilidade: MariaDB/MySQL | Compatibility: MariaDB/MySQL
 -- Migration 010: Procedure de instalação e seed settings | Installation procedure and base settings
 
-DELIMITER $$
+DELIMITER //
 
-DROP PROCEDURE IF EXISTS sp_instalacao_verificar $$
+DROP PROCEDURE IF EXISTS sp_instalacao_verificar //
 -- Procedure `sp_instalacao_verificar` (MariaDB/MySQL) | Procedure `sp_instalacao_verificar` (MariaDB/MySQL)
 CREATE PROCEDURE sp_instalacao_verificar(
     OUT p_ja_instalado TINYINT,
@@ -22,7 +22,7 @@ BEGIN
     IF p_versao IS NULL THEN
         SET p_versao = '1.0.0';
     END IF;
-END $$
+END //
 
 DELIMITER ;
 

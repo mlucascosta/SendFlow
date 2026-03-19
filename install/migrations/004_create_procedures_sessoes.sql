@@ -1,9 +1,9 @@
 -- Compatibilidade: MariaDB/MySQL | Compatibility: MariaDB/MySQL
 -- Migration 004: Procedures de sessão | Session procedures
 
-DELIMITER $$
+DELIMITER //
 
-DROP PROCEDURE IF EXISTS sp_sessao_criar $$
+DROP PROCEDURE IF EXISTS sp_sessao_criar //
 -- Procedure `sp_sessao_criar` (MariaDB/MySQL) | Procedure `sp_sessao_criar` (MariaDB/MySQL)
 CREATE PROCEDURE sp_sessao_criar(
     IN p_session_id VARCHAR(128),
@@ -22,9 +22,9 @@ BEGIN
 
     SET p_codigo_retorno = 201;
     SET p_mensagem = 'Sessão criada | Session created';
-END $$
+END //
 
-DROP PROCEDURE IF EXISTS sp_sessao_validar $$
+DROP PROCEDURE IF EXISTS sp_sessao_validar //
 -- Procedure `sp_sessao_validar` (MariaDB/MySQL) | Procedure `sp_sessao_validar` (MariaDB/MySQL)
 CREATE PROCEDURE sp_sessao_validar(
     IN p_session_id VARCHAR(128),
@@ -71,9 +71,9 @@ BEGIN
         SET p_codigo = 200;
         SET p_mensagem = 'Sessão válida | Valid session';
     END IF;
-END $$
+END //
 
-DROP PROCEDURE IF EXISTS sp_sessao_listar_ativas $$
+DROP PROCEDURE IF EXISTS sp_sessao_listar_ativas //
 -- Procedure `sp_sessao_listar_ativas` (MariaDB/MySQL) | Procedure `sp_sessao_listar_ativas` (MariaDB/MySQL)
 CREATE PROCEDURE sp_sessao_listar_ativas(
     IN p_user_id INT,
@@ -90,9 +90,9 @@ BEGIN
     FROM sessions
     WHERE user_id = p_user_id AND is_active = 1
     ORDER BY last_activity DESC;
-END $$
+END //
 
-DROP PROCEDURE IF EXISTS sp_sessao_encerrar $$
+DROP PROCEDURE IF EXISTS sp_sessao_encerrar //
 -- Procedure `sp_sessao_encerrar` (MariaDB/MySQL) | Procedure `sp_sessao_encerrar` (MariaDB/MySQL)
 CREATE PROCEDURE sp_sessao_encerrar(
     IN p_session_id VARCHAR(128),
@@ -112,9 +112,9 @@ BEGIN
 
     SET p_codigo_retorno = 200;
     SET p_mensagem = 'Sessão encerrada | Session terminated';
-END $$
+END //
 
-DROP PROCEDURE IF EXISTS sp_sessao_encerrar_todas_exceto_atual $$
+DROP PROCEDURE IF EXISTS sp_sessao_encerrar_todas_exceto_atual //
 -- Procedure `sp_sessao_encerrar_todas_exceto_atual` (MariaDB/MySQL) | Procedure `sp_sessao_encerrar_todas_exceto_atual` (MariaDB/MySQL)
 CREATE PROCEDURE sp_sessao_encerrar_todas_exceto_atual(
     IN p_user_id INT,
@@ -136,6 +136,6 @@ BEGIN
 
     SET p_codigo_retorno = 200;
     SET p_mensagem = 'Outras sessões encerradas | Other sessions terminated';
-END $$
+END //
 
 DELIMITER ;

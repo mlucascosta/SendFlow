@@ -21,6 +21,9 @@ return [
         'url' => 'https://seudominio.com',
         'key' => 'base64:change-me',
     ],
+    'resend' => [
+        'webhook_secret' => 'whsec_change_me',
+    ],
     'database' => [
         'driver' => 'mysql',
         'host' => 'localhost',
