@@ -6,13 +6,15 @@ use App\Services\Installer;
 use App\Services\Validator;
 
 require_once __DIR__ . '/../../app/services/Encryption.php';
+require_once __DIR__ . '/../../app/services/Database.php';
 require_once __DIR__ . '/../../app/services/Installer.php';
 require_once __DIR__ . '/../../app/services/Validator.php';
 
 session_start();
 
 $installer = new Installer();
-$envPath = __DIR__ . '/../../config/env.php';
+$projectRoot = dirname(__DIR__, 2);
+$envPath = $projectRoot . '/config/env.php';
 $steps = [
     1 => '01_welcome.php',
     2 => '02_database.php',
@@ -25,6 +27,7 @@ $steps = [
 $_SESSION['install'] ??= [
     'step' => 1,
     'database' => [],
+    'database_mode' => 'mysql',
     'admin' => [],
     'resend' => [],
     'migrations' => [],
@@ -46,21 +49,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($action === 'save_database') {
                 $databaseInput = [
                     'host' => trim((string) ($_POST['host'] ?? '')),
-                    'port' => (int) ($_POST['port'] ?? 3306),
+                    'port' => trim((string) ($_POST['port'] ?? '')),
                     'database' => trim((string) ($_POST['database'] ?? '')),
                     'username' => trim((string) ($_POST['username'] ?? '')),
                     'password' => (string) ($_POST['password'] ?? ''),
-                    'charset' => 'utf8mb4',
                 ];
 
-                $errors = validateDatabaseInput($databaseInput);
+                $databaseConfig = $installer->resolveDatabaseConfig($databaseInput, $projectRoot);
+                $errors = validateDatabaseInput($databaseInput, $databaseConfig, $installer);
                 if ($errors === []) {
-                    $envConfig = $installer->buildEnvConfig($databaseInput);
-                    $installer->runMigrations($envConfig['database'], __DIR__ . '/../../install/migrations');
+                    $envConfig = $installer->buildEnvConfig($databaseConfig);
+                    $migrationsDir = $installer->getMigrationsDirectory($envConfig['database'], $projectRoot);
+                    $executedMigrations = $installer->runMigrations($envConfig['database'], $migrationsDir);
                     $installer->writeEnvFile($envPath, $envConfig);
 
-                    $_SESSION['install']['database'] = $databaseInput;
-                    $_SESSION['install']['migrations'] = ['status' => 'completed'];
+                    $_SESSION['install']['database'] = $databaseConfig;
+                    $_SESSION['install']['database_mode'] = (string) $databaseConfig['driver'];
+                    $_SESSION['install']['migrations'] = [
+                        'status' => 'completed',
+                        'count' => count($executedMigrations),
+                        'driver' => $databaseConfig['driver'],
+                    ];
                     $_SESSION['install']['step'] = 3;
 
                     redirectToStep(3);
@@ -130,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $progress = (int) (($step / count($steps)) * 100);
-$file = __DIR__ . '/../../install/steps/' . $steps[$step];
+$file = $projectRoot . '/install/steps/' . $steps[$step];
 $old = $_SESSION['install'];
 $csrfToken = $_SESSION['install_csrf'];
 ?>
@@ -152,7 +161,7 @@ $csrfToken = $_SESSION['install_csrf'];
       <div>
         <p class="text-sm uppercase tracking-[0.2em] text-red-600 font-semibold">SendFlow</p>
         <h1 class="text-2xl font-bold mt-2">Personalized onboarding</h1>
-        <p class="text-neutral-500 mt-2">A guided setup for a secure MySQL/MariaDB-based SendFlow deployment.</p>
+        <p class="text-neutral-500 mt-2">A guided setup for secure MySQL/MariaDB deployments or zero-config local installs using SQLite fallback.</p>
       </div>
 
       <div class="space-y-3">
@@ -219,25 +228,30 @@ $csrfToken = $_SESSION['install_csrf'];
 
 /**
  * @param array<string,mixed> $databaseInput
+ * @param array<string,mixed> $databaseConfig
  * @return array<int,string>
  */
-function validateDatabaseInput(array $databaseInput): array
+function validateDatabaseInput(array $databaseInput, array $databaseConfig, Installer $installer): array
 {
+    if ($installer->shouldUseSqlite($databaseInput)) {
+        return [];
+    }
+
     $errors = [];
 
-    if (!Validator::host((string) $databaseInput['host'])) {
+    if (!Validator::host((string) $databaseConfig['host'])) {
         $errors[] = 'Provide a valid MySQL/MariaDB hostname or IP address.';
     }
 
-    if ((int) $databaseInput['port'] < 1 || (int) $databaseInput['port'] > 65535) {
+    if ((int) $databaseConfig['port'] < 1 || (int) $databaseConfig['port'] > 65535) {
         $errors[] = 'Database port must be between 1 and 65535.';
     }
 
-    if (!Validator::required((string) $databaseInput['database'])) {
+    if (!Validator::required((string) $databaseConfig['database'])) {
         $errors[] = 'Database name is required.';
     }
 
-    if (!Validator::required((string) $databaseInput['username'])) {
+    if (!Validator::required((string) $databaseConfig['username'])) {
         $errors[] = 'Database username is required.';
     }
 
